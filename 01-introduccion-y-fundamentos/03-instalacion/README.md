@@ -41,59 +41,69 @@ Herramientas como `nvm` (Node Version Manager) son muy famosas, pero en este cur
 
 ## 🚀 Guía de instalación y uso de `fnm`
 
-### 1. Instalar `fnm`
-Dependiendo de tu sistema operativo, puedes seguir las instrucciones de la [documentación oficial de fnm](https://github.com/Schniz/fnm). 
+### 1. Instalar `fnm` según tu Sistema Operativo
 
-En macOS y Linux, habitualmente basta con ejecutar este script en tu terminal:
-
+#### 🍎 Para macOS y 🐧 Linux
+Abre tu terminal y ejecuta este script oficial:
 ```bash
 curl -fsSL [https://fnm.vercel.app/install](https://fnm.vercel.app/install) | bash
 ```
-*(Si usas Windows, revisa la documentación oficial para instalarlo vía `winget` o `choco`).*
 
-> **⚠️ Importante:** Si tras instalarlo el comando `fnm` no es reconocido, simplemente **cierra tu terminal y vuelve a abrirla** para que se recarguen las variables de entorno.
+*Cierra tu terminal y vuelve a abrirla para que se apliquen los cambios.*
 
-Verifica que se ha instalado correctamente ejecutando:
-```bash
+#### 👨‍💻 Para Windows (Guía a prueba de fallos)
+En Windows, la configuración requiere un par de pasos extra para asegurar que funcione perfectamente. **⚠️ IMPORTANTE: Usa siempre `PowerShell` y NO el Símbolo del Sistema (CMD) clásico.**
+
+**Paso A: Instalar el programa**
+Abre una terminal de **PowerShell** y ejecuta:
+```powershell
+winget install Schniz.fnm
+```
+**Paso B: Dar permisos a PowerShell (Seguridad)**
+Por defecto, Windows bloquea la ejecución de scripts. Para programar, necesitas habilitar los scripts locales. En la misma terminal, ejecuta:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+**Paso C: Configurar el perfil automáticamente**
+Para que `fnm` funcione cada vez que abres PowerShell, necesitamos guardar su configuración. Ejecuta este comando (cópialo todo entero, soluciona problemas comunes si usas OneDrive):
+```powershell
+if (!(Test-Path (Split-Path $PROFILE))) { New-Item -Type Directory -Path (Split-Path $PROFILE) -Force }; Set-Content -Path $PROFILE -Value 'fnm env --use-on-cd | Out-String | Invoke-Expression'
+```
+**Paso D: Reiniciar**
+Cierra completamente tu ventana de PowerShell y abre una nueva. Verifica que todo funciona escribiendo:
+```powershell
 fnm --version
 ```
 
 ### 2. Instalar Node.js (Versión LTS)
-No hace falta que busques en internet cuál es la versión LTS actual, `fnm` lo hace por ti. Ejecuta:
+Una vez instalado `fnm`, no hace falta que busques en internet cuál es la versión LTS actual, el gestor lo hace por ti. Ejecuta:
 
 ```bash
 fnm install --lts
 ```
-Esto descargará e instalará la última versión estable (por ejemplo, la 24.12.0).
-
+Y para decirle a tu sistema que use esa versión por defecto cada vez que abras la terminal:
+```bash
+fnm default lts-latest
+```
 ### 3. Comandos básicos para tu día a día
 
 Una vez tienes `fnm`, gestionar tus versiones es cuestión de segundos:
 
-* **Listar versiones instaladas:** Mira qué versiones de Node tienes disponibles en tu máquina.
+* **Listar versiones instaladas:** Mira qué versiones de Node tienes en tu máquina.
   ```bash
   fnm ls
   ```
-
 * **Instalar una versión específica:** ¿Tienes un proyecto antiguo que usa la versión 18?
   ```bash
   fnm install 18
   ```
-
 * **Cambiar de versión temporalmente:** Cambia la versión activa solo para la pestaña actual de tu terminal.
   ```bash
   fnm use 18
   ```
-(Puedes verificar el cambio ejecutando node --version)
-
-* **Establecer una versión por defecto:** Haz que cada vez que abras una nueva terminal, arranque con tu versión preferida (idealmente la LTS que instalaste).
-  ```bash
-  fnm default 24.12.0
-  ```
+(Puedes verificar el cambio ejecutando `node -v`)
 
 * **Desinstalar una versión:** Limpia tu sistema de versiones que ya no usas.
   ```bash
   fnm uninstall 18
   ```
-
-¡Y ya está! Con esto tienes un entorno de desarrollo profesional, flexible y a prueba de balas para empezar a trabajar con Node.js en cualquier proyecto.
